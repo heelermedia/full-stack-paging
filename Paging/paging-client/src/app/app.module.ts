@@ -3,10 +3,16 @@ import { NgModule } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { PaginationComponent } from './pagination/pagination.component';
+import { MockDataComponent } from './mock-data/mock-data.component';
+import { MockDataDisplayComponent } from './mock-data-display/mock-data-display.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    PaginationComponent,
+    MockDataComponent,
+    MockDataDisplayComponent
   ],
   imports: [
     BrowserModule,

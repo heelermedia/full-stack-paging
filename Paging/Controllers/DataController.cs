@@ -20,7 +20,7 @@ namespace Paging.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<List<MockDataDto>>> GetClientsAsync(Page page)
+        public async Task<ActionResult<List<MockDataDto>>> GetMockData(Page page)
         {
             PagedList<MockDataDto> mockData = await _mockData.GetMockDataPagedAsync(page);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(mockData.PagedListMetaData));
