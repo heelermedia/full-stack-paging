@@ -10,7 +10,6 @@ import { Observable, of, EMPTY } from 'rxjs';
 import { mergeMap, take, map } from 'rxjs/operators';
 import { HttpHeaders, HttpClient, HttpResponse } from '@angular/common/http';
 import { MockDataService } from './mock-data.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import { MockData } from './mock-data';
 
 @Injectable({
