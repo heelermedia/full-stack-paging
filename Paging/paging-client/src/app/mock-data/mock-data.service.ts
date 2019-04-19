@@ -11,11 +11,7 @@ export class MockDataService {
 
     constructor(private _http: HttpClient) { }
 
-    public getMockData(pageNumber: number, pageSize: number): Observable<MockData[]> {
-        return this._http.get<MockData[]>(`https://localhost:44307/api/data?pageNumber=${pageNumber}&pageSize=${pageSize}`)
-            .pipe(map((data: any) => {
-                let mockData: MockData[] = data.map((d: any) => new MockData(d));
-                return mockData;
-            }));
+    public getMockData(pageNumber: number, pageSize: number): Observable<HttpResponse<MockData[]>> {
+        return this._http.get<MockData[]>(`http://localhost:50117/api/data?pageNumber=${pageNumber}&pageSize=${pageSize}`, { observe: 'response' });
     }
 }

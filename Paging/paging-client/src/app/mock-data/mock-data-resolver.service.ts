@@ -23,7 +23,7 @@ export class MockDataResolverService {
         private _router: Router) {
     }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<MockData[]> | Observable<Observable<MockData[]>> | Promise<Observable<MockData[]>> {
+    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<HttpResponse<MockData[]>> | Observable<Observable<HttpResponse<MockData[]>>> | Promise<Observable<HttpResponse<MockData[]>>> {
         return this._mockDataService.getMockData(route.queryParams.pageNumber, route.queryParams.pageSize).pipe(take(1), mergeMap(mockData => {
             if (mockData) {
                 return of(mockData);

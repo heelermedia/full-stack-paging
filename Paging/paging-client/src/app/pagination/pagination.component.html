@@ -1,9 +1,26 @@
-<nav aria-label="Page navigation example">
-    <ul class="pagination">
-        <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-        <li class="page-item"><a class="page-link" href="#">1</a></li>
-        <li class="page-item"><a class="page-link" href="#">2</a></li>
-        <li class="page-item"><a class="page-link" href="#">3</a></li>
-        <li class="page-item"><a class="page-link" href="#">Next</a></li>
-    </ul>
-</nav>
+<div class="row">
+    <div class="col-lg-4">
+        <div>Showing {{showingX}} to {{toX}} of {{pageMetaData.totalCount}} entries</div>
+    </div>
+    <div class="col-lg-8">
+        <div class="float-right">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a (click)="onPrevious()" class="page-link" aria-label="Previous">
+                            Previous
+                        </a>
+                    </li>
+                    <li *ngFor="let page of pagesDisplay" [ngClass]="{ 'active': page.isSelected }" class="page-item">
+                        <a (click)="onPageClicked(page)" class="page-link">{{page.pageNumber}}</a>
+                    </li>
+                    <li class="page-item">
+                        <a (click)="onNext()" class="page-link" aria-label="Next">
+                            Next
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
