@@ -38,9 +38,7 @@ namespace DataAccess
         public async Task<PagedList<MockDataDto>> GetMockDataPagedAsync(Page page)
         {
             int mockDataCount = await GetMockDataCountAsync();
-            //experimenting with ways to do this
             PagedList<MockDataDto> mockData = PagedList<MockDataDto>.Create(mockDataCount, page.PageNumber, page.PageSize);
-
             using (SqlConnection conn = GetSqlConnection(cs))
             {
                 using (SqlCommand command = conn.CreateCommand())
@@ -64,7 +62,7 @@ namespace DataAccess
                     SqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection);
 
                     while (await reader.ReadAsync())
-                    {//[id], [first_name], [last_name], [gender], [ip_address] 
+                    {
                         MockDataDto md = new MockDataDto
                         {
                             Id = int.Parse(reader["id"].ToString()),
