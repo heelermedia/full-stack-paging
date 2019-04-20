@@ -13,7 +13,7 @@ import { PageChunk } from './page-chunk';
 })
 export class PaginationComponent implements OnInit {
     //the display array since there could be many pages
-    private pagesDisplay: Page[] = [];
+    public pagesDisplay: Page[] = [];
     //an array of page chunks to page back and forth between to update ui display
     private pageChunks: PageChunk[] = [];
     private selectedPageChunk: PageChunk;
@@ -34,8 +34,7 @@ export class PaginationComponent implements OnInit {
     public ngOnInit() {
         this.initialize();
         //subscribe to hosting component setting a page externally via the browser
-        //TODO: update obervable name to have browser in it
-        this.subscriptions.push(this._pagerService.setPageFromQueryParametersObservable.subscribe((pageNumber: number) => {
+        this.subscriptions.push(this._pagerService.setPageFromQueryParameters$.subscribe((pageNumber: number) => {
             //set correct PageChunk
             let pageChunk: PageChunk = this.getPageChunkByPageNumber(pageNumber);
             //turn the page number into a 0 based index
@@ -90,12 +89,6 @@ export class PaginationComponent implements OnInit {
         this._pagerService.pageChanged(page);
     }
 
-    private getSelectedPage(): Page {
-        return this.pagesDisplay.forEach((page: Page, index: number) => {
-            return page.isSelected;
-        })[0];
-    }
-
     private getLastPageInPageChunks(): Page {
         const lastPageChunk: PageChunk = this.pageChunks[this.pageChunks.length - 1];
         const lastPage: Page = lastPageChunk.pages[lastPageChunk.pages.length - 1];
@@ -103,7 +96,7 @@ export class PaginationComponent implements OnInit {
     }
 
     //set the active page of the displayed pages
-    private onPageClicked(page: Page): void {
+    public onPageClicked(page: Page): void {
         //set the selected page
         this.setSelectedPage(page);
         //enable next and previous

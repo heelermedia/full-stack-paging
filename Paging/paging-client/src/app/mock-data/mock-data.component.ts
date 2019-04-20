@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { PageMetaData } from '../pagination/page-meta-data';
 import { Page } from '../pagination/page';
 import { MockData } from './mock-data';
@@ -13,7 +13,7 @@ import { HttpResponse } from '@angular/common/http';
     templateUrl: './mock-data.component.html',
     styleUrls: ['./mock-data.component.scss']
 })
-export class MockDataComponent implements OnInit {
+export class MockDataComponent implements OnInit, OnDestroy {
 
     public mockData: MockData[] = [];
 
@@ -46,9 +46,6 @@ export class MockDataComponent implements OnInit {
             this.pageMetaData.totalPages = pmd.TotalPages;
             this.pageMetaData.pageSize = pmd.PageSize;
             this.pageMetaData.totalCount = pmd.TotalCount;
-
-            this.pageMetaData.hasPrevious = pmd.HasPrevious;
-            this.pageMetaData.hasNext = pmd.HasNext;
 
             //grab the query params
             let qp = this._route.snapshot.queryParams;
@@ -84,7 +81,7 @@ export class MockDataComponent implements OnInit {
         }));
 
         //subscribe to page changes from the pager service
-        this.subscriptions.push(this._pagerService.pageSourceObservable.subscribe((page: Page) => {
+        this.subscriptions.push(this._pagerService.pageSource$.subscribe((page: Page) => {
             //only after the control has initialized shall we execute this code
             //this is becuase if the user refreshes the browser we want the query parameters pageNumber and pageSize
             //to drive the data we fetch to render
@@ -111,7 +108,6 @@ export class MockDataComponent implements OnInit {
     }
 
     private onMockDataResponse(mockData: any[], pageNumber: number): void {
-        //clone them into the array updating the ui
         this.mockData = mockData;
         //the first time the page loads this will be false
         if (this.isInitialized === false) {
@@ -120,15 +116,13 @@ export class MockDataComponent implements OnInit {
             if (!this.selectedPage) {
                 //flag it as a browser action
                 this.browserAction = true;
-                //this._pagerService.setFromQueryParameters(pageNumber);
+                this._pagerService.setFromQueryParameters(pageNumber);
             }
-
         }
     }
 
-    //TODO: seperate out display components that can use this grid
     private getMockData(pageNumber: number, pageSize: number): void {
-        //get a new set of clients
+        //get a new set of mock data
         this._mockDataService.getMockData(pageNumber, pageSize).subscribe((response: HttpResponse<MockData[]>) => {
             this.onMockDataResponse(response.body, pageNumber);
             //set page meta data
@@ -139,10 +133,14 @@ export class MockDataComponent implements OnInit {
             this.pageMetaData.totalPages = pmd.TotalPages;
             this.pageMetaData.pageSize = pmd.PageSize;
             this.pageMetaData.totalCount = pmd.TotalCount;
-            this.pageMetaData.hasPrevious = pmd.HasPrevious;
-            this.pageMetaData.hasNext = pmd.HasNext;
             //reset everything
             this._pagerService.init();
+        });
+    }
+
+    public ngOnDestroy(): void {
+        this.subscriptions.forEach((subscription: Subscription) => {
+            subscription.unsubscribe();
         });
     }
 }

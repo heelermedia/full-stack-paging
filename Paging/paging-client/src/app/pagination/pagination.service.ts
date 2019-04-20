@@ -10,12 +10,15 @@ export class PaginationService {
     constructor() { }
 
     private pageSource: Subject<Page> = new Subject<Page>();
-    private setPageFromQueryParameters: Subject<number> = new Subject<number>();
-    public initialize: Subject<void> = new Subject<void>();
+    public pageSource$: Observable<Page> = this.pageSource.asObservable();
 
-    public pageSourceObservable: Observable<Page> = this.pageSource.asObservable();
-    public setPageFromQueryParametersObservable: Observable<number> = this.setPageFromQueryParameters.asObservable();
-    public initializeObservable: Observable<void> = this.initialize.asObservable();
+
+    private setPageFromQueryParameters: Subject<number> = new Subject<number>();
+    public setPageFromQueryParameters$: Observable<number> = this.setPageFromQueryParameters.asObservable();
+
+
+    public initialize: Subject<void> = new Subject<void>();
+    public initialize$: Observable<void> = this.initialize.asObservable();
 
 
     public pageChanged(page: Page): void {
